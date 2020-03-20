@@ -42,8 +42,8 @@
 #define CONFIG_MXC_UART_BASE    UART4_BASE
 #define CONSOLE_DEV      "ttymxc3"
 #else
-#define CONFIG_MXC_UART_BASE    UART1_BASE
-#define CONSOLE_DEV      "ttymxc0"
+#define CONFIG_MXC_UART_BASE    UART3_BASE
+#define CONSOLE_DEV      "ttymxc2"
 #endif
 #define CONFIG_MMCROOT          "/dev/mmcblk2p2"  /* SDHC3 */
 
