@@ -991,6 +991,8 @@ static int const usb_otg_pwr_en_gpio[] = {
 	IMX_GPIO_NR(4, 15),
 	/* SOLOCustomBoard */
 	IMX_GPIO_NR(3, 22),
+    /*nano-edge-cpx*/
+    IMX_GPIO_NR(4, 15)
 };
 
 static int const usb_h1_pwr_en_gpio[] = {
@@ -998,6 +1000,8 @@ static int const usb_h1_pwr_en_gpio[] = {
 	IMX_GPIO_NR(1, 28),
 	/* SOLOCustomBoard */
 	IMX_GPIO_NR(4, 15),
+    /*nano-edge-cpx*/
+    IMX_GPIO_NR(3, 26)
 };
 
 static iomux_v3_cfg_t const usb_pads[][3*2] = {
@@ -1012,20 +1016,24 @@ static iomux_v3_cfg_t const usb_pads[][3*2] = {
 		IOMUX_PADS(PAD_GPIO_1__USB_OTG_ID	| MUX_PAD_CTRL(OTG_ID_PAD_CTRL)),
 		IOMUX_PADS(PAD_EIM_D22__GPIO3_IO22	| MUX_PAD_CTRL(NO_PAD_CTRL)),
 		IOMUX_PADS(PAD_KEY_ROW4__GPIO4_IO15	| MUX_PAD_CTRL(NO_PAD_CTRL)),
+	},
+	{
+		/* nano-edge-cpx */
+		IOMUX_PADS(PAD_GPIO_1__USB_OTG_ID	| MUX_PAD_CTRL(OTG_ID_PAD_CTRL)),
+		IOMUX_PADS(PAD_EIM_D26__GPIO3_IO26	| MUX_PAD_CTRL(NO_PAD_CTRL)), //h1 pwr
+		IOMUX_PADS(PAD_KEY_ROW4__GPIO4_IO15	| MUX_PAD_CTRL(NO_PAD_CTRL)), //otg pwr
 	}
 };
 
 static void setup_usb(void)
 {
 	int board = get_board_indx();
-	if (board == MX6_CUSTOM_BOARD)
-		return;
 
 	SETUP_IOMUX_PADS(usb_pads[board]);
 	gpio_request(usb_otg_pwr_en_gpio[board], "USB OTG Power Enable");
 	gpio_request(usb_h1_pwr_en_gpio[board], "USB H1 Power Enable");
-	gpio_direction_output(usb_otg_pwr_en_gpio[board], 0);
-	gpio_direction_output(usb_h1_pwr_en_gpio[board], 0);
+	gpio_direction_output(usb_otg_pwr_en_gpio[board], 1);
+	gpio_direction_output(usb_h1_pwr_en_gpio[board], 1);
 }
 
 int board_usb_phy_mode(int port)
@@ -1045,7 +1053,8 @@ int board_ehci_power(int port, int on)
 {
 	int board = get_board_indx();
 	if (board == MX6_CUSTOM_BOARD)
-		return 0; /* no power enable needed */
+		gpio_set_value(usb_h1_pwr_en_gpio[board], on);
+		gpio_set_value(usb_otg_pwr_en_gpio[board], on);
 
 	if (port > 1)
 		return -EINVAL;

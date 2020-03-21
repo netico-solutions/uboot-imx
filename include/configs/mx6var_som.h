@@ -24,13 +24,13 @@
 
 #define CONFIG_IMX_THERMAL
 
+#define CONFIG_MXC_UART
 #define CONFIG_MXC_UART_BASE		UART3_BASE
-#define CONSOLE_DEV			"ttymxc2"
+#define CONSOLE_DEV 			    "ttymxc2"
 
 /* Size of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(16 * SZ_1M)
 
-#define CONFIG_MXC_UART
 
 #define LOW_POWER_MODE_ENABLE
 
@@ -212,7 +212,7 @@
 	"splashenable=setenv splashfile /boot/splash.bmp; " \
 		"setenv splashimage 0x18100000\0" \
 	"splashdisable=setenv splashfile; setenv splashimage\0" \
-	"console="CONSOLE_DEV"\0" \
+	"console="CONSOLE_DEV "\0" \
 	"netargs=setenv bootargs console=${console},${baudrate} " \
 		"root=/dev/nfs rw " \
 		"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp; " \
