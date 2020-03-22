@@ -1052,9 +1052,8 @@ int board_usb_phy_mode(int port)
 int board_ehci_power(int port, int on)
 {
 	int board = get_board_indx();
-	if (board == MX6_CUSTOM_BOARD)
-		gpio_set_value(usb_h1_pwr_en_gpio[board], on);
-		gpio_set_value(usb_otg_pwr_en_gpio[board], on);
+    gpio_set_value(usb_h1_pwr_en_gpio[board], on);
+    gpio_set_value(usb_otg_pwr_en_gpio[board], on);
 
 	if (port > 1)
 		return -EINVAL;
