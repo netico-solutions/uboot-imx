@@ -74,7 +74,7 @@ defined(CONFIG_MX6DL)) && !defined(CONFIG_MX6S)
 #define CONFIG_SYS_LOAD_ADDR	CONFIG_LOADADDR
 
 /* allow to overwrite serial and ethaddr */
-#define CONFIG_ENV_OVERWRITE    1
+#define CONFIG_ENV_OVERWRITE    
 #define CONFIG_CONS_INDEX       1
 #define CONFIG_BAUDRATE         115200
 
