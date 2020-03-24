@@ -187,9 +187,15 @@
 
 #define VIDEO_ENV_SETTINGS \
 	"videoargs=" \
-	"video=mxcfb0:dev=hdmi,1920x1080M@60,if=RGB24; " \
-	"setenv bootargs ${bootargs} " \
-	"video=mxcfb1:off video=mxcfb2:off video=mxcfb3:off;\0"
+	"if hdmidet; then " \
+        "setenv bootargs ${bootargs} " \
+		"video=mxcfb0:dev=hdmi,1920x1080M@60,if=RGB24; " \
+    "else " \
+        "setenv bootargs ${bootargs} " \
+        "video=mxcfb0:dev=ldb; " \
+    "fi; " \
+    "setenv bootargs ${bootargs} " \
+    "video=mxcfb1:off video=mxcfb2:off video=mxcfb3:off;\0"
 
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
