@@ -330,11 +330,6 @@ static iomux_v3_cfg_t const uart1_pads[] = {
        IOMUX_PADS(PAD_CSI0_DAT11__UART1_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
 };
 
-static iomux_v3_cfg_t const uart3_pads[] = {
-       IOMUX_PADS(PAD_EIM_D24__UART3_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
-	   IOMUX_PADS(PAD_EIM_D25__UART3_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
-};
-
 static iomux_v3_cfg_t const enet_pads1[] = {
 	IOMUX_PADS(PAD_ENET_MDIO__ENET_MDIO	| MUX_PAD_CTRL(ENET_PAD_CTRL)),
 	IOMUX_PADS(PAD_ENET_MDC__ENET_MDC	| MUX_PAD_CTRL(ENET_PAD_CTRL)),
@@ -474,7 +469,6 @@ static void setup_local_i2c(void)
 static void setup_iomux_uart(void)
 {
 	SETUP_IOMUX_PADS(uart1_pads);
-	SETUP_IOMUX_PADS(uart3_pads);
 }
 
 #ifdef CONFIG_FSL_ESDHC
@@ -928,6 +922,7 @@ static void setup_display(void)
 	reg = (reg & ~(IOMUXC_GPR3_LVDS1_MUX_CTL_MASK | IOMUXC_GPR3_HDMI_MUX_CTL_MASK))
 		| (IOMUXC_GPR3_MUX_SRC_IPU1_DI0 << IOMUXC_GPR3_LVDS1_MUX_CTL_OFFSET);
 	writel(reg, &iomux->gpr[3]);
+    
 }
 #elif defined(CONFIG_IMX_HDMI)
 static void setup_hdmi(void)
@@ -936,7 +931,7 @@ static void setup_hdmi(void)
 	SETUP_IOMUX_PAD(PAD_DISP0_DAT9__GPIO4_IO30 | MUX_PAD_CTRL(PAD_CTL_PUS_100K_DOWN));
 	gpio_request(VAR_SOM_BACKLIGHT_EN, "Display Backlight Enable");
 	gpio_direction_input(VAR_SOM_BACKLIGHT_EN);
-
+    
 	imx_setup_hdmi();
 }
 #endif /* CONFIG_VIDEO_IPUV3 */
@@ -948,6 +943,27 @@ static void setup_hdmi(void)
 int overwrite_console(void)
 {
 	return 1;
+}
+
+static void board_gpio_init(void) 
+{
+    /*HDMI Enable pin*/
+    SETUP_IOMUX_PAD(PAD_EIM_D23__GPIO3_IO23 | MUX_PAD_CTRL(NO_PAD_CTRL));
+    gpio_request(IMX_GPIO_NR(3, 23), "HDMI Enable");
+    gpio_direction_output(IMX_GPIO_NR(3, 23), 1);
+    
+    /*LED gpios*/
+    SETUP_IOMUX_PAD(PAD_EIM_D23__GPIO3_IO23 | MUX_PAD_CTRL(NO_PAD_CTRL));
+    gpio_request(IMX_GPIO_NR(1, 9), "White LED");
+    gpio_direction_output(IMX_GPIO_NR(1, 9), 0);
+    
+    SETUP_IOMUX_PAD(PAD_EIM_D23__GPIO3_IO23 | MUX_PAD_CTRL(NO_PAD_CTRL));
+    gpio_request(IMX_GPIO_NR(2, 9), "Blue LED");
+    gpio_direction_output(IMX_GPIO_NR(2, 9), 0);
+    
+    SETUP_IOMUX_PAD(PAD_EIM_D23__GPIO3_IO23 | MUX_PAD_CTRL(NO_PAD_CTRL));
+    gpio_request(IMX_GPIO_NR(2, 14), "Red LED");
+    gpio_direction_output(IMX_GPIO_NR(2, 14), 0);
 }
 
 int board_eth_init(bd_t *bis)
@@ -1089,16 +1105,19 @@ int board_early_init_f(void)
 
 int board_init(void)
 {
+
+board_gpio_init();
+
 #if defined(CONFIG_VIDEO_IPUV3)
 	setup_display();
 #elif defined(CONFIG_IMX_HDMI)
 	setup_hdmi();
 #endif
-
 #ifdef CONFIG_USB_EHCI_MX6
 #ifndef CONFIG_DM_USB
 	setup_usb();
 #endif
+    
 	int board = get_board_indx();
 
 	/* 'usb_otg_id' pin iomux select control */
