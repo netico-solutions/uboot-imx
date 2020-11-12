@@ -279,7 +279,7 @@
 				"if i2c probe 0x38; then " \
 					"setenv fdt_file imx6dl-var-som-solo-cap.dtb; " \
 				"else " \
-					"setenv fdt_file imx6dl-var-som-solo-res.dtb; " \
+					"setenv fdt_file imx6dl-var-som-solo-res-nedge.dtb; " \
 				"fi; " \
 			"fi; " \
 			"if test $board_name = MX6CUSTOM && test $board_rev = MX6DL && test $board_som = SOM-MX6; then " \
