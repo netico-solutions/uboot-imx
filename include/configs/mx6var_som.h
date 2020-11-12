@@ -24,8 +24,8 @@
 
 #define CONFIG_IMX_THERMAL
 
-#define CONFIG_MXC_UART_BASE		UART1_BASE
-#define CONSOLE_DEV 			    "ttymxc0"
+#define CONFIG_MXC_UART_BASE		UART3_BASE
+#define CONSOLE_DEV			"ttymxc2"
 
 /* Size of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(16 * SZ_1M)
