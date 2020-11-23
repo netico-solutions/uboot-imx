@@ -970,6 +970,11 @@ static void board_gpio_init(void)
     SETUP_IOMUX_PAD(PAD_EIM_D23__GPIO3_IO23 | MUX_PAD_CTRL(NO_PAD_CTRL));
     gpio_request(IMX_GPIO_NR(2, 14), "Red LED");
     gpio_direction_output(IMX_GPIO_NR(2, 14), 0);
+
+    /* TPM gpios */
+    SETUP_IOMUX_PAD(PAD_SD4_DAT3__GPIO2_IO11 | MUX_PAD_CTRL(NO_PAD_CTRL));
+    gpio_request(IMX_GPIO_NR(2, 11), "TPM RESET");
+    gpio_direction_output(IMX_GPIO_NR(2, 11), 1);
 }
 
 int board_eth_init(bd_t *bis)
