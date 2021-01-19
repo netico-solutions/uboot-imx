@@ -24,8 +24,8 @@
 
 #define CONFIG_IMX_THERMAL
 
-#define CONFIG_MXC_UART_BASE		UART1_BASE
-#define CONSOLE_DEV 			    "ttymxc0"
+#define CONFIG_MXC_UART_BASE		UART3_BASE
+#define CONSOLE_DEV			"ttymxc2"
 
 /* Size of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(16 * SZ_1M)
@@ -279,7 +279,7 @@
 				"if i2c probe 0x38; then " \
 					"setenv fdt_file imx6dl-var-som-solo-cap.dtb; " \
 				"else " \
-					"setenv fdt_file imx6dl-var-som-solo-res.dtb; " \
+					"setenv fdt_file imx6dl-var-som-solo-res-nedge.dtb; " \
 				"fi; " \
 			"fi; " \
 			"if test $board_name = MX6CUSTOM && test $board_rev = MX6DL && test $board_som = SOM-MX6; then " \
